@@ -5,20 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedidos Figuritas 2026</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #f0f2f5; color: #333; }
-        .card { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .hidden { display: none; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        .btn-next { background: #007bff; color: white; }
-        .btn-send { background: #28a745; color: white; }
-        .btn-back { background: #6c757d; color: white; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .equipo-btn { background: #fff; border: 2px solid #007bff; color: #007bff; padding: 10px; border-radius: 8px; text-align: center; }
-        .fig-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .fig-item { padding: 10px; border: 1px solid #ddd; border-radius: 5px; text-align: center; cursor: pointer; font-size: 0.8em; }
-        .seleccionada { background: #28a745 !important; color: white; border-color: #1e7e34; }
-        h2, h3 { text-align: center; color: #0056b3; }
+        body { font-family: 'Segoe UI', sans-serif; padding: 15px; background: #f8f9fa; color: #333; }
+.card { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.hidden { display: none; }
+
+/* Estilo de los inputs */
+input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+
+/* Botones principales */
+button { width: 100%; padding: 15px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
+.btn-next { background: #007bff; color: white; margin-top: 10px; }
+.btn-send { background: #28a745; color: white; margin-top: 20px; position: sticky; bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.btn-back { background: #6c757d; color: white; margin-top: 15px; }
+
+/* Grid de Equipos (Alineación de banderas) */
+.grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 15px; }
+.equipo-btn { 
+    display: flex; 
+    align-items: center; 
+    background: #fff; 
+    border: 1px solid #eee; 
+    padding: 12px; 
+    border-radius: 12px; 
+    cursor: pointer;
+    font-size: 16px;
+}
+.equipo-btn:active { background: #e9ecef; }
+.equipo-btn img { 
+    width: 35px; 
+    height: 25px; 
+    border-radius: 4px; 
+    margin-right: 15px; 
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Grid de Figuritas (Números) */
+.fig-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
+.fig-item { 
+    padding: 12px 5px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    text-align: center; 
+    cursor: pointer; 
+    font-size: 13px; 
+    background: #fff;
+}
+.seleccionada { background: #28a745 !important; color: white; border-color: #1e7e34; font-weight: bold; }
+
+h2, h3 { text-align: center; margin-top: 0; color: #1a1a1a; }
     </style>
 </head>
 <body>
@@ -126,21 +161,29 @@
     };
 
     function renderEquipos() {
-        const div = document.getElementById('lista-equipos');
-        div.innerHTML = ''; // Limpiar por si acaso
+    const div = document.getElementById('lista-equipos');
+    div.innerHTML = ''; 
+    
+    EQUIPOS.forEach(eq => {
+        const btn = document.createElement('div');
+        btn.className = 'equipo-btn';
         
-        EQUIPOS.forEach(eq => {
-            const btn = document.createElement('div');
-            btn.className = 'equipo-btn';
-            
-            // Aquí insertamos la imagen de la bandera usando la API
-            const imgFlag = `<img src="https://flagcdn.com/w40/${eq.flag}.png" style="margin-right:10px; vertical-align:middle; border-radius:3px;">`;
-            
-            btn.innerHTML = imgFlag + eq.nombre;
-            btn.onclick = () => verDetalle(eq);
-            div.appendChild(btn);
-        });
-    }
+        // Creamos la imagen de la bandera
+        const img = document.createElement('img');
+        img.src = `https://flagcdn.com/w80/${eq.flag}.png`;
+        
+        // Creamos el texto del nombre
+        const span = document.createElement('span');
+        span.innerText = eq.nombre;
+        
+        // Metemos la imagen y el texto dentro del botón
+        btn.appendChild(img);
+        btn.appendChild(span);
+        
+        btn.onclick = () => verDetalle(eq);
+        div.appendChild(btn);
+    });
+}
 
     function verDetalle(eq) {
         document.getElementById('titulo-equipo').innerText = eq.nombre;
